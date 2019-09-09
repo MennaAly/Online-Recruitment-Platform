@@ -37,6 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+     'Employer',
+    'JobSeeker',
+    'Authentication.apps.AuthenticationConfig'
 ]
 
 MIDDLEWARE = [
@@ -77,7 +83,7 @@ WSGI_APPLICATION = 'Online_Recruitment_Platform.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'online_recruitment',
+        'NAME': 'online_recuiretment',
         'USER' : 'root',
         'PASSWORD' : 'root',
         'HOST' : 'localhost',
