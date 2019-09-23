@@ -7,10 +7,7 @@ from rest_framework.response import Response
 from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.models import User
 # your app
-from .serializers import GeneralProfileSerializer
-from Employer.models import EmployerProfile
 from Employer.serializers import EmployerProfileSerializer
-from JobSeeker.models import JobSeekerProfile
 from JobSeeker.serializers import JobSeekerProfileSerializer
 
 

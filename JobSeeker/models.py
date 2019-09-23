@@ -1,5 +1,7 @@
 # standard library imports
 # core django imorts
+from enum import Enum
+
 from django.db import models
 # third party app imports
 from django.contrib.auth.models import User
@@ -9,33 +11,31 @@ from Authentication.models import Profile
 
 # Create your models here.
 
-gender_choices = {
-    ('Male', 'Male'),
-    ('Female', 'Female')
-}
-
-martial_status_choices = {
-    ('Single', 'Single'),
-    ('Married', 'Married'),
-}
-
-experience_type_choices = {
-    ('Full time', 'Full time'),
-    ('Part time', 'Part time'),
-    ('Freelance/Project', 'Freelance/Project'),
-    ('Internship', 'Internship'),
-    ('Volunteering', 'Volunteering'),
-    ('Student activity', 'Student activity')
-}
-
-
 class GeneralInfo(models.Model):
+    class GENDERS(Enum):
+        male = ('Male','Male')
+        female = ('Female','Female')
+
+        @classmethod
+        def get_value(cls,member):
+            return cls[member].value[0]
+
+        # male = GeneralInfo.GENDERS.get_value('male')
+        # GeneralInfo.objects.filter(gender=male)
+    class MATRIALSTATUSES(Enum):
+        single = ('Single','Single')
+        married = ('Married','Married')
+
+        @classmethod
+        def get_value(cls,member):
+            return cls[member].value[0]
+
     address = models.CharField(max_length=255)
     age = models.IntegerField()
     birth_date = models.DateField()
-    gender = models.CharField(max_length=10, choices=gender_choices)
+    gender = models.CharField(max_length=10, choices=[x.value for x in GENDERS])
     nationality = models.CharField(max_length=255)
-    martial_status = models.CharField(max_length=10, choices=martial_status_choices, default='Single')
+    martial_status = models.CharField(max_length=10, choices=[x.value for x in MATRIALSTATUSES], default='Single')
     num_of_dependencies = models.IntegerField()
     have_driving_license = models.BooleanField(default=False)
     mobile_number = models.CharField(max_length=15)
@@ -52,10 +52,13 @@ class JobType(models.Model):
 class Role(models.Model):
     role = models.CharField(max_length=255)
 
-
 class Country(models.Model):
-    name = models.CharField(max_length=255)
-
+    name = models.CharField(max_length=255,null=True)
+    iso = models.CharField(max_length=225,null=True)
+    nicename = models.CharField(max_length=225,null=True)
+    iso3 = models.CharField(max_length=225,null=True)
+    numcode = models.IntegerField(null=True)
+    phonecode = models.IntegerField(null=True)
 
 class SearchStatus(models.Model):
     status = models.CharField(max_length=255)
@@ -70,7 +73,7 @@ class Intersts(models.Model):
 
 
 class Expirence(models.Model):
-    expiernce_type = models.CharField(max_length=25, choices=experience_type_choices)
+    expiernce_type = models.OneToOneField(JobType,null=True,on_delete=models.CASCADE)
     job_title = models.CharField(max_length=225)
     job_role = models.ForeignKey(Role, on_delete=models.PROTECT)
     company_name = models.CharField(max_length=225)
@@ -108,5 +111,6 @@ class JobSeekerProfile(models.Model):
     general_profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
     general_info = models.ForeignKey(GeneralInfo, on_delete=models.CASCADE, null=True)
     intersts = models.ForeignKey(Intersts, on_delete=models.CASCADE, null=True)
+    skills = models.ManyToManyField(Skill)
     experiences = models.ManyToManyField(Expirence)
     upload_cv = models.FilePathField(null=True)

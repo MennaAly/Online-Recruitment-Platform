@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Online_Recruitment_Platform.iml" filepath="$PROJECT_DIR$/.idea/Online_Recruitment_Platform.iml" />
+      <module fileurl="file://$USER_HOME$/work/B2B/SMSBackend/.idea/SMSBackend.iml" filepath="$USER_HOME$/work/B2B/SMSBackend/.idea/SMSBackend.iml" />
     </modules>
   </component>
 </project>

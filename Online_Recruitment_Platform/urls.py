@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/',include([
       url(r'^auth/',include(('rest_auth.urls','rest_auth'),namespace='REST Auth')),
-      url(r'',include(('Authentication.urls','Authentication'),namespace='Authentication'))
+      url(r'',include(('Authentication.urls','Authentication'),namespace='Authentication')),
+      url(r'',include(('JobSeeker.urls','JobSeeker'),namespace='JobSeeker'))
     ]))
 ]
