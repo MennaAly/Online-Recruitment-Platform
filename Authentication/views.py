@@ -38,7 +38,7 @@ class Register(viewsets.ModelViewSet):
     def save_profile(self):
         profile_serializer = self.get_serializer(data=self.profile_dict)
         profile_serializer.is_valid(raise_exception=True)
-        profile_serializer.save()
+        return profile_serializer.save()
 
     def save_user(self, username, email, password):
         user = self.user_model.objects.create(
@@ -61,5 +61,5 @@ class Register(viewsets.ModelViewSet):
         self.profile_dict = {
             'general_profile': user.profile.id
         }
-        self.save_profile()
-        return Response(status=status.HTTP_201_CREATED)
+        profile_object = self.save_profile()
+        return Response(profile_object.id,status=status.HTTP_201_CREATED)

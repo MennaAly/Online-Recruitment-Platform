@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from Employer.models import CompanySize, CompanyIndustry
+from Authentication.models import Profile
 from .models import JobSeekerProfile, GeneralInfo, Intersts, Expirence, Skill, CurrentLevel, JobType, Role, Country, \
     SearchStatus, YearsOfExpiernce
 
@@ -25,7 +26,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
 class SkillSerializer(serializers.ModelSerializer):
     years_of_expiernce_id = serializers.PrimaryKeyRelatedField(queryset=YearsOfExpiernce.objects.all(),
-                                                               source='YearsOfExpiernce', required=False)
+                                                               source='years_of_expiernce', required=False)
 
     class Meta:
         model = Skill
@@ -34,12 +35,12 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class InterstsSerializer(serializers.ModelSerializer):
-    current_level_id = serializers.PrimaryKeyRelatedField(queryset=CurrentLevel.objects.all(), source='CurrentLevel',
+    current_level_id = serializers.PrimaryKeyRelatedField(queryset=CurrentLevel.objects.all(), source='current_level',
                                                           required=False)
     job_types = serializers.SerializerMethodField()
     roles = serializers.SerializerMethodField()
-    country_id = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), source='Country', required=False)
-    search_status_id = serializers.PrimaryKeyRelatedField(queryset=SearchStatus.objects.all(), source='SearchStatus',
+    country_id = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(), source='country', required=False)
+    search_status_id = serializers.PrimaryKeyRelatedField(queryset=SearchStatus.objects.all(), source='search_status',
                                                           required=False)
 
     def get_job_types(self, obj):
@@ -64,14 +65,14 @@ class InterstsSerializer(serializers.ModelSerializer):
 
 class ExpirenceSerializer(serializers.ModelSerializer):
     expiernce_type_id = serializers.PrimaryKeyRelatedField(queryset=JobType.objects.all(), required=False,
-                                                           source='JobType')
-    job_role_id = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), required=False, source='Role')
+                                                           source='expiernce_type')
+    job_role_id = serializers.PrimaryKeyRelatedField(queryset=Role.objects.all(), required=False, source='job_role')
     career_level_id = serializers.PrimaryKeyRelatedField(queryset=CurrentLevel.objects.all(), required=False,
-                                                         source='CurrentLevel')
+                                                         source='career_level')
     company_size_id = serializers.PrimaryKeyRelatedField(queryset=CompanySize.objects.all(), required=False,
-                                                         source='CompanySize')
+                                                         source='company_size')
     company_industry_id = serializers.PrimaryKeyRelatedField(queryset=CompanyIndustry.objects.all(), required=False,
-                                                             source='CompanyIndustry')
+                                                             source='company_industry')
 
     class Meta:
         model = Expirence
@@ -86,9 +87,6 @@ class ExpirenceSerializer(serializers.ModelSerializer):
             'from_date',
             'is_work_there',
             'description',
-            'career_level',
-            'company_size',
-            'company_industry',
             'starting_salary',
             'ending_salary'
         ]
@@ -102,9 +100,14 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class JobSeekerProfileSerializer(serializers.ModelSerializer):
-    general_infos = GeneralInfoSerializer(required=True)
-    intersts = InterstsSerializer(required=True)
+    general_profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(),required=False)
+    # it will be sent as an object
+    general_info = serializers.PrimaryKeyRelatedField(queryset=GeneralInfo.objects.all(),required=False)
+    # it will be sent as an object
+    intersts = serializers.PrimaryKeyRelatedField(queryset=Intersts.objects.all(),required=False)
+    # it will be sent as ids
     skills = serializers.SerializerMethodField()
+    # it will be sent as ids
     expierences = serializers.SerializerMethodField()
 
     def get_skills(self, obj):
@@ -117,6 +120,6 @@ class JobSeekerProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobSeekerProfile
-        fields = ['general_infos','intersts','skills','expierences']
+        fields = ['general_profile','general_info','intersts','skills','expierences']
         read_only_fields = ['id']
 
