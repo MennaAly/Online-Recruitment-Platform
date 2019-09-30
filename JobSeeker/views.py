@@ -1,6 +1,5 @@
 from django.db import transaction
-from django.shortcuts import render
-from rest_framework import viewsets, status, generics
+from rest_framework import  status, generics
 from rest_framework.response import Response
 from .models import JobSeekerProfile, JobType, Role
 from .serializers import JobSeekerProfileSerializer, GeneralInfoSerializer, InterstsSerializer, SkillSerializer, \

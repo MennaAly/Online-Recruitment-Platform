@@ -1,9 +1,10 @@
 from rest_framework import serializers
 
-from Employer.models import CompanySize, CompanyIndustry
+# from Employer.models import CompanySize, CompanyIndustry
 from Authentication.models import Profile
 from .models import JobSeekerProfile, GeneralInfo, Intersts, Expirence, Skill, CurrentLevel, JobType, Role, Country, \
     SearchStatus, YearsOfExpiernce
+from MasterData.models import CompanySize,CompanyIndustry
 
 
 class GeneralInfoSerializer(serializers.ModelSerializer):

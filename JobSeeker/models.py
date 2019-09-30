@@ -5,29 +5,32 @@ from enum import Enum
 from django.db import models
 # third party app imports
 from django.contrib.auth.models import User
-from Employer.models import CompanySize, CompanyIndustry
+# from Employer.models import CompanySize, CompanyIndustry
 # imports from your app
 from Authentication.models import Profile
+from MasterData.models import JobType, SearchStatus, Country, CurrentLevel, Role, YearsOfExpiernce , CompanyIndustry , CompanySize
+
 
 # Create your models here.
 
 class GeneralInfo(models.Model):
     class GENDERS(Enum):
-        male = ('Male','Male')
-        female = ('Female','Female')
+        male = ('Male', 'Male')
+        female = ('Female', 'Female')
 
         @classmethod
-        def get_value(cls,member):
+        def get_value(cls, member):
             return cls[member].value[0]
 
         # male = GeneralInfo.GENDERS.get_value('male')
         # GeneralInfo.objects.filter(gender=male)
+
     class MATRIALSTATUSES(Enum):
-        single = ('Single','Single')
-        married = ('Married','Married')
+        single = ('Single', 'Single')
+        married = ('Married', 'Married')
 
         @classmethod
-        def get_value(cls,member):
+        def get_value(cls, member):
             return cls[member].value[0]
 
     address = models.CharField(max_length=255)
@@ -41,29 +44,6 @@ class GeneralInfo(models.Model):
     mobile_number = models.CharField(max_length=15)
 
 
-class CurrentLevel(models.Model):
-    level = models.CharField(max_length=255)
-
-
-class JobType(models.Model):
-    type = models.CharField(max_length=255)
-
-
-class Role(models.Model):
-    role = models.CharField(max_length=255)
-
-class Country(models.Model):
-    name = models.CharField(max_length=255,null=True)
-    iso = models.CharField(max_length=225,null=True)
-    nicename = models.CharField(max_length=225,null=True)
-    iso3 = models.CharField(max_length=225,null=True)
-    numcode = models.IntegerField(null=True)
-    phonecode = models.IntegerField(null=True)
-
-class SearchStatus(models.Model):
-    status = models.CharField(max_length=255)
-
-
 class Intersts(models.Model):
     current_level = models.OneToOneField(CurrentLevel, on_delete=models.PROTECT)
     job_type = models.ManyToManyField(JobType)
@@ -73,7 +53,7 @@ class Intersts(models.Model):
 
 
 class Expirence(models.Model):
-    expiernce_type = models.OneToOneField(JobType,null=True,on_delete=models.CASCADE)
+    expiernce_type = models.OneToOneField(JobType, null=True, on_delete=models.CASCADE)
     job_title = models.CharField(max_length=225)
     job_role = models.ForeignKey(Role, on_delete=models.PROTECT)
     company_name = models.CharField(max_length=225)
@@ -89,10 +69,6 @@ class Expirence(models.Model):
     company_industry = models.ForeignKey(CompanyIndustry, on_delete=models.PROTECT)
     starting_salary = models.IntegerField()
     ending_salary = models.IntegerField()
-
-
-class YearsOfExpiernce(models.Model):
-    num_of_years = models.CharField(max_length=256)
 
 
 class Skill(models.Model):

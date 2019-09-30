@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_auth',
      'Employer',
     'JobSeeker',
+    'MasterData',
     'Authentication.apps.AuthenticationConfig'
 ]
 
