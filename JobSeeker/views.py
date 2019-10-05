@@ -18,7 +18,6 @@ class UpdateJobSeekerProfile(generics.UpdateAPIView):
     intersts_roles = []
     skills = []
     experiences = []
-    job_seeker_profile_dict = {}
 
     def save_general_info(self):
         general_info_serializer = GeneralInfoSerializer(data=self.general_info)
