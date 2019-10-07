@@ -12,7 +12,7 @@ class EmployerTest(TestCase):
     """
     @classmethod
     def setUpTestData(cls):
-        cls.edit_url = reverse('/update_employer_profile')
+        cls.edit_url = reverse('/update_employer_profile/')
         cls.user = User.objects.create(username='Menna', email='menna@gmail.com', password='1234')
         cls.general_profile = Profile.objects.create(user=cls.user)
         cls.employer_profile = EmployerProfile.objects.create(general_profile=cls.general_profile)

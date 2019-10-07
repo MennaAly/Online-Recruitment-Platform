@@ -41,7 +41,8 @@ INSTALLED_APPS = [
      'Employer',
     'JobSeeker',
     'MasterData',
-    'Authentication.apps.AuthenticationConfig'
+    'Authentication.apps.AuthenticationConfig',
+    'Job'
 ]
 
 MIDDLEWARE = [

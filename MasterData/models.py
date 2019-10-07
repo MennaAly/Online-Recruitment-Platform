@@ -33,3 +33,6 @@ class CompanySize(models.Model):
 
 class CompanyIndustry(models.Model):
     industry = models.CharField(max_length=256)
+
+class Language(models.Model):
+    language = models.CharField(max_length=256)
