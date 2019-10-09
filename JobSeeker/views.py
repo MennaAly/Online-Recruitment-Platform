@@ -1,13 +1,9 @@
 from django.db import transaction
-from rest_framework import  status, generics
+from rest_framework import status, generics
 from rest_framework.response import Response
 from .models import JobSeekerProfile, JobType, Role
 from .serializers import JobSeekerProfileSerializer, GeneralInfoSerializer, InterstsSerializer, SkillSerializer, \
     ExpirenceSerializer
-
-
-# Create your views here.
-
 
 class UpdateJobSeekerProfile(generics.UpdateAPIView):
     queryset = JobSeekerProfile.objects.all()
@@ -79,5 +75,7 @@ class UpdateJobSeekerProfile(generics.UpdateAPIView):
         # save user experiences
         self.save_expiernces(jobseeker_profile_object)
         # save job seeker profile
-        JobSeekerProfile.objects.filter(pk=request.data.get('profile_id')).update(general_info=general_info_obj, intersts=intersts_obj)
+        JobSeekerProfile.objects.filter(pk=request.data.get('profile_id')).update(general_info=general_info_obj,
+                                                                                  intersts=intersts_obj)
         return Response(status=status.HTTP_201_CREATED)
+

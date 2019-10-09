@@ -10,26 +10,23 @@ class Point(models.Model):
 
 
 class Paragraph(models.Model):
-    title = models.CharField(max_length=256)
+    title = models.CharField(max_length=256,null=True,blank=True)
     points = models.ManyToManyField(Point)
+    is_about_job = models.BooleanField(default=True,null=True,blank=True)
+    is_job_requirement = models.BooleanField(default=False,null=True,blank=True)
 
-
-class JobDescription(models.Model):
-    pargraphs = models.ManyToManyField(Paragraph)
-    is_about_job = models.BooleanField(default=True)
-    is_job_requirement = models.BooleanField(default=False)
-
-
+# every field is null=true
 class JobPost(models.Model):
     post_name = models.CharField(max_length=256)
     company = models.ForeignKey(EmployerProfile, on_delete=models.PROTECT)
-    years_of_expierence = models.CharField(max_length=256)
+    years_of_expierence = models.CharField(max_length=256,null=True,blank=True)
     job_roles = models.ManyToManyField(Role)
     career_level = models.ForeignKey(CurrentLevel, on_delete=models.PROTECT)
-    salary = models.CharField(max_length=256)
+    # default Confidential
+    salary = models.CharField(max_length=256,default='Confidential',null=True,blank=True)
     job_type = models.ForeignKey(JobType, on_delete=models.PROTECT)
     languages = models.ManyToManyField(Language)
-    vacancies = models.IntegerField()
-    job_description = models.ForeignKey(JobDescription, on_delete=models.PROTECT)
-    is_active = models.BooleanField(default=True)
+    vacancies = models.IntegerField(null=True,blank=True)
+    pargraphs = models.ManyToManyField(Paragraph)
+    is_active = models.BooleanField(default=True,null=True,blank=True)
     applicants = models.ManyToManyField(JobSeekerProfile)

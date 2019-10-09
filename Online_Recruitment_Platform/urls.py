@@ -25,5 +25,6 @@ urlpatterns = [
       url(r'',include(('Authentication.urls','Authentication'),namespace='Authentication')),
       url(r'',include(('JobSeeker.urls','JobSeeker'),namespace='JobSeeker')),
       url(r'',include(('Employer.urls','Employer'),namespace='Employer')),
+      url(r'',include(('Job.urls','Job'),namespace='Job')),
     ]))
 ]
