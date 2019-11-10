@@ -1,8 +1,6 @@
 from django.db import models
 from MasterData.models import CurrentLevel, JobType, Language, Role
 from Employer.models import EmployerProfile
-from JobSeeker.models import JobSeekerProfile
-
 
 # Create your models here.
 class Point(models.Model):
@@ -29,4 +27,4 @@ class JobPost(models.Model):
     vacancies = models.IntegerField(null=True,blank=True)
     pargraphs = models.ManyToManyField(Paragraph)
     is_active = models.BooleanField(default=True,null=True,blank=True)
-    applicants = models.ManyToManyField(JobSeekerProfile)
+

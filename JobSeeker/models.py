@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 # from Employer.models import CompanySize, CompanyIndustry
 # imports from your app
 from Authentication.models import Profile
+# from Job.models import JobPost
+from Job.models import JobPost
 from MasterData.models import JobType, SearchStatus, Country, CurrentLevel, Role, YearsOfExpiernce , CompanyIndustry , CompanySize
 
 
@@ -90,3 +92,13 @@ class JobSeekerProfile(models.Model):
     skills = models.ManyToManyField(Skill)
     experiences = models.ManyToManyField(Expirence)
     upload_cv = models.FilePathField(null=True)
+    jobs = models.ManyToManyField(JobPost,through='JobSeekerAndJobPosts')
+
+class JobSeekerAndJobPosts(models.Model):
+    job_seeker = models.ForeignKey(JobSeekerProfile,on_delete=models.CASCADE)
+    job_post = models.ForeignKey(JobPost,on_delete=models.CASCADE)
+    is_saved = models.BooleanField(default=False)
+    is_applied_for = models.BooleanField(default=True)
+
+
+

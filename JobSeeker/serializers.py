@@ -1,10 +1,13 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
 # from Employer.models import CompanySize, CompanyIndustry
 from Authentication.models import Profile
+from Job.models import JobPost
+from Job.serializers import JobPostMiniSerializer
 from .models import JobSeekerProfile, GeneralInfo, Intersts, Expirence, Skill, CurrentLevel, JobType, Role, Country, \
-    SearchStatus, YearsOfExpiernce
-from MasterData.models import CompanySize,CompanyIndustry
+    SearchStatus, YearsOfExpiernce, JobSeekerAndJobPosts
+from MasterData.models import CompanySize, CompanyIndustry
 
 
 class GeneralInfoSerializer(serializers.ModelSerializer):
@@ -101,11 +104,11 @@ class SkillSerializer(serializers.ModelSerializer):
 
 
 class JobSeekerProfileSerializer(serializers.ModelSerializer):
-    general_profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(),required=False)
+    general_profile = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all(), required=False)
     # it will be sent as an object
-    general_info = serializers.PrimaryKeyRelatedField(queryset=GeneralInfo.objects.all(),required=False)
+    general_info = serializers.PrimaryKeyRelatedField(queryset=GeneralInfo.objects.all(), required=False)
     # it will be sent as an object
-    intersts = serializers.PrimaryKeyRelatedField(queryset=Intersts.objects.all(),required=False)
+    intersts = serializers.PrimaryKeyRelatedField(queryset=Intersts.objects.all(), required=False)
     # it will be sent as ids
     skills = serializers.SerializerMethodField()
     # it will be sent as ids
@@ -115,12 +118,67 @@ class JobSeekerProfileSerializer(serializers.ModelSerializer):
         skill_instances = Skill.objects.filter(JobSeekerProfile=obj)
         return SkillSerializer(skill_instances, many=True).data
 
-    def get_expierences(self,obj):
-        expierence_instances =  Expirence.objects.filter(JobSeekerProfile=obj)
-        return ExpirenceSerializer(expierence_instances,many=True).data
+    def get_expierences(self, obj):
+        expierence_instances = Expirence.objects.filter(JobSeekerProfile=obj)
+        return ExpirenceSerializer(expierence_instances, many=True).data
 
     class Meta:
         model = JobSeekerProfile
-        fields = ['general_profile','general_info','intersts','skills','expierences']
+        fields = ['general_profile', 'general_info', 'intersts', 'skills', 'expierences']
         read_only_fields = ['id']
 
+
+class JobSeekerAndJobPostsSerializer(serializers.ModelSerializer):
+    job_seeker_id = serializers.PrimaryKeyRelatedField(queryset=JobSeekerProfile.objects.all(), required=False,
+                                                       source='job_seeker')
+    job_post_id = serializers.PrimaryKeyRelatedField(queryset=JobPost.objects.all(), required=False, source='job_post')
+
+    class Meta:
+        model = JobSeekerAndJobPosts
+        fields = [
+            'id',
+            'job_seeker_id',
+            'job_post_id',
+            'is_saved',
+            'is_applied_for'
+        ]
+        read_only_fields = ['id']
+
+
+class JobSeekerAndMiniJobPostsSerializer(serializers.ModelSerializer):
+    job_post = JobPostMiniSerializer(read_only=True)
+
+    class Meta:
+        model = JobSeekerAndJobPosts
+        fields = [
+            'id',
+            'job_post'
+        ]
+        read_only_fields = ['id']
+
+
+class JobSeekerMiniSerializer(serializers.ModelSerializer):
+    name = serializers.SerializerMethodField()
+
+    def get_name(self, obj):
+        user = Profile.objects.filter(jobseekerprofile=obj)
+        user_name = User.objects.filter(id=user)
+        return user_name
+
+    class Meta:
+        model = JobSeekerProfile
+        fields = [
+            'id',
+            'name'
+        ]
+        read_only_fields = ['id']
+
+class MiniJobSeekerAndJobPostsSerializer(serializers.ModelSerializer):
+    job_seeker = JobSeekerMiniSerializer(read_only=True)
+
+    class Meta:
+        model = JobSeekerAndJobPosts
+        fields =[
+            'id',
+            'job_seeker'
+        ]
