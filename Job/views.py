@@ -66,26 +66,18 @@ class PostJob(viewsets.ModelViewSet):
         return Response(status=status.HTTP_201_CREATED)
 
 
-class ApplyForJob(generics.UpdateAPIView):
-    def update(self, request, *args, **kwargs):
-        job_seeker_id = request.data.get('job_seeker_id')
-        job_id = request.data.get("job_id")
-        job = JobPost.objects.filter(id=job_id).first()
-        job_seeker = JobSeekerProfile.objects.filter(id=job_seeker_id).first()
-        job.applicants.add(job_seeker)
-        job.save()
-        return Response(status=status.HTTP_200_OK)
-
-
 class JobPostFilter(FilterSet):
     # print('heereeee')
     class Meta:
         model = JobPost
         fields = {
-            # 'company__id':['exact',],
+            'company__id': ['exact', ],
             'is_active': ['exact', ],
-            # 'career_level__id' : ['exact',],
-            # 'job_type__id' : ('exact',)
+            'career_level__level': ['exact', 'icontains'],
+            'job_type__id': ('exact',),
+            'company__country__id': ['exact', ],
+            'date': ['exact', ],
+            'company__company_industry': ['exact']
         }
 
 
@@ -109,15 +101,17 @@ class filterJobs(viewsets.ModelViewSet):
     #     # and save it
     #     return Response(JobPostSerializer(job_posts, many=True).data, status=status.HTTP_200_OK)
 
+
 class JobSeekerAndJobsFilter(FilterSet):
     class Meta:
         model = JobSeekerAndJobPosts
         fields = {
-            'job_seeker__id' : ['exact',],
-            'job_post__id' : ['exact',],
-            'is_saved' : ['exact',],
-            'is_applied_for' : ['exact',]
+            'job_seeker__id': ['exact', ],
+            'job_post__id': ['exact', ],
+            'is_saved': ['exact', ],
+            'is_applied_for': ['exact', ]
         }
+
 
 class JobSeekerAndJobs(viewsets.ModelViewSet):
     queryset = JobSeekerAndJobPosts.objects.all()
@@ -132,6 +126,7 @@ class JobSeekerAndJobs(viewsets.ModelViewSet):
         elif serializer_name == 'mini_job_seekers':
             return MiniJobSeekerAndJobPostsSerializer
         return JobSeekerAndJobPostsSerializer
+
     """
     apply for a job 
     save job
@@ -147,6 +142,3 @@ class JobSeekerAndJobs(viewsets.ModelViewSet):
     #     jobseeker_and_jobposts_serializer.is_valid(raise_exception=True)
     #     jobseeker_and_jobposts_serializer.save()
     #     return Response(status=status.HTTP_200_OK)
-
-
-

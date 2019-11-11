@@ -27,4 +27,5 @@ class JobPost(models.Model):
     vacancies = models.IntegerField(null=True,blank=True)
     pargraphs = models.ManyToManyField(Paragraph)
     is_active = models.BooleanField(default=True,null=True,blank=True)
+    date = models.DateField(null=True)
 

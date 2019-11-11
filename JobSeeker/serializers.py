@@ -8,6 +8,7 @@ from Job.serializers import JobPostMiniSerializer
 from .models import JobSeekerProfile, GeneralInfo, Intersts, Expirence, Skill, CurrentLevel, JobType, Role, Country, \
     SearchStatus, YearsOfExpiernce, JobSeekerAndJobPosts
 from MasterData.models import CompanySize, CompanyIndustry
+from Authentication.serializers import UserSerializer
 
 
 class GeneralInfoSerializer(serializers.ModelSerializer):
@@ -158,18 +159,17 @@ class JobSeekerAndMiniJobPostsSerializer(serializers.ModelSerializer):
 
 
 class JobSeekerMiniSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
+    user = serializers.SerializerMethodField()
 
-    def get_name(self, obj):
+    def get_user(self, obj):
         user = Profile.objects.filter(jobseekerprofile=obj)
-        user_name = User.objects.filter(id=user)
-        return user_name
+        return UserSerializer(user.first().user).data
 
     class Meta:
         model = JobSeekerProfile
         fields = [
             'id',
-            'name'
+            'user'
         ]
         read_only_fields = ['id']
 

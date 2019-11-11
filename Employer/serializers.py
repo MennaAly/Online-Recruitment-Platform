@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from Authentication.models import Profile
 from .models import EmployerProfile, ContactInfo
-from MasterData.models import CompanySize, CompanyIndustry, Role
+from MasterData.models import CompanySize, CompanyIndustry, Role , Country
 
 
 class CompanyIndustrySerializer(serializers.ModelSerializer):
@@ -36,8 +36,12 @@ class EmployerProfileSerializer(serializers.ModelSerializer):
     # contact_info = ContactInfoSerializer(required=False)
     company_industry_id = serializers.PrimaryKeyRelatedField(queryset=CompanyIndustry.objects.all(), required=False,
                                                              source='company_industry')
+
     company_size_id = serializers.PrimaryKeyRelatedField(queryset=CompanySize.objects.all(), required=False,
                                                          source='company_size')
+
+    country_id = serializers.PrimaryKeyRelatedField(queryset=Country.objects.all(),required=False,source='country')
+
     contact_info_object = serializers.SerializerMethodField()
 
     company_industry_object = serializers.SerializerMethodField()
@@ -68,6 +72,7 @@ class EmployerProfileSerializer(serializers.ModelSerializer):
             'company_website',
             'contact_info_object',
             'company_industry_object',
-            'company_size_object'
+            'company_size_object',
+            'country_id'
         ]
         read_only_fields = ['id']

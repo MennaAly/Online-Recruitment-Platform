@@ -92,7 +92,8 @@ class JobPostSerializer(serializers.ModelSerializer):
             'language_set',
             'is_about_job_set',
             'is_job_requirement_set',
-            'number_of_applicants'
+            'number_of_applicants',
+            'date'
         ]
         read_only_fields = ['id']
 

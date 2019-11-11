@@ -23,7 +23,7 @@ class UpdateEmployerProfile(generics.UpdateAPIView):
         employer_profile_dict['contact_info_id'] = contact_info_id
         """
         if u want the serializer to update the instance 
-        serializer(instance, data=data) => here it will be in the update mode
+        serializer(old instance, data=data) => here it will be in the update mode
         serializer(data=data) => creation mode
         """
         employer_profile_serializer = EmployerProfileSerializer(employer_profile_instance, data=employer_profile_dict)
